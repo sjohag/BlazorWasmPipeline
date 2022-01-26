@@ -51,18 +51,18 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 :: Deployment
 :: ----------
 
-dotnet workload install wasm-tools
+:: dotnet workload install wasm-tools
 
 IF "%BLAZORENVIRONMENT%" == "Development" (
   XCOPY "%DEPLOYMENT_SOURCE%\BlazorWasmPipeline\web.Development.config" "%DEPLOYMENT_SOURCE%\BlazorWasmPipeline\web.config" /Y
 )
 
-dotnet publish "%DEPLOYMENT_SOURCE%\BlazorWasmPipeline\BlazorWasmPipeline.csproj" -o "%DEPLOYMENT_TEMP%" -c Release
+:: dotnet publish "%DEPLOYMENT_SOURCE%\BlazorWasmPipeline\BlazorWasmPipeline.csproj" -o "%DEPLOYMENT_TEMP%" -c Release
 
-:: echo Handling ASP.NET Core Web Application deployment with MSBuild16.7.0.
+echo Handling ASP.NET Core Web Application deployment with MSBuild16.7.0.
 
 :: 1. Restore, Build and publish
-:: call :ExecuteCmd "%MSBUILD_1670_DIR%\MSBuild.exe" /restore "%DEPLOYMENT_SOURCE%\BlazorWasmPipeline\BlazorWasmPipeline.csproj" /p:DeployOnBuild=true /p:configuration=Release /p:publishurl="%DEPLOYMENT_TEMP%" %SCM_BUILD_ARGS%
+call :ExecuteCmd "%MSBUILD_1670_DIR%\MSBuild.exe" /restore "%DEPLOYMENT_SOURCE%\BlazorWasmPipeline\BlazorWasmPipeline.csproj" /p:DeployOnBuild=true /p:configuration=Release /p:publishurl="%DEPLOYMENT_TEMP%" %SCM_BUILD_ARGS%
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. KuduSync
